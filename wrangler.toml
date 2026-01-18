@@ -1,7 +1,7 @@
 name = "cloudflare-auth-system"
 main = "src/index.js"
-compatibility_date = "2024-01-01"
-compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2024-09-23"
+
 
 #[[d1_databases]]
 #binding = "db"			#d1数据库绑定名默认不可修改
