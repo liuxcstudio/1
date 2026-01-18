@@ -1080,7 +1080,7 @@ function loadCodes() {
     adminPanel.loadStats();
 }
 
-const adminPanel = new AdminPanel();
+const adminPanel = new AdminPanel();`;
 
 export const ASSETS = {
   index: indexHtml,
