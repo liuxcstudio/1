@@ -16,4 +16,5 @@ const output = `export const ASSETS = ${JSON.stringify(assets, null, 2)};`;
 
 fs.writeFileSync(path.join(__dirname, '..', 'src', 'assets.js'), output);
 
-console.log('Assets bundled successfully!');
+console.log('✅ Assets bundled successfully!');
+console.log('📦 Output: src/assets.js');
