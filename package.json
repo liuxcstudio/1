@@ -1,0 +1,29 @@
+{
+  "name": "cloudflare-auth-system",
+  "version": "1.0.0",
+  "description": "基于 Cloudflare Workers、D1 和 KV 的身份认证系统",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "d1:create": "wrangler d1 create auth-db",
+    "d1:migrate": "wrangler d1 migrations apply auth-db --local",
+    "d1:migrate:prod": "wrangler d1 migrations apply auth-db"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "auth",
+    "d1",
+    "kv"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

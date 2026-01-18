@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>软件授权管理 - 管理员面板</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--primary-gradient);
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-weight: 700;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background: transparent;
+            border-bottom: 2px solid #f0f0f0;
+            padding: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .table {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table thead {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .table th {
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+        }
+
+        .table td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+
+        .badge {
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .code-display {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stats-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .alert {
+            border-radius: 12px;
+            border: none;
+            padding: 15px;
+        }
+
+        .spinner-border {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="header">
+            <h1><i class="bi bi-shield-key me-2"></i>软件授权管理系统</h1>
+            <p class="text-muted">生成和管理软件授权码</p>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card stats-card">
+                    <div class="stats-number" id="totalCodes">0</div>
+                    <div class="stats-label">总授权数</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stats-card">
+                    <div class="stats-number" id="activeCodes">0</div>
+                    <div class="stats-label">有效授权</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stats-card">
+                    <div class="stats-number" id="totalUsers">0</div>
+                    <div class="stats-label">已激活设备</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-plus-circle me-2"></i>生成新授权码
+                    </div>
+                    <div class="card-body">
+                        <form id="generateCodeForm">
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="softwareName" class="form-label">软件名称</label>
+                                    <input type="text" class="form-control" id="softwareName" placeholder="例如：MyApp-Pro" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="maxDevices" class="form-label">最大设备数</label>
+                                    <input type="number" class="form-control" id="maxDevices" value="1" min="1" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="expiresAt" class="form-label">过期时间（可选）</label>
+                                    <input type="datetime-local" class="form-control" id="expiresAt">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-magic me-2"></i>生成授权码
+                            </button>
+         </form>
+                    </div>
+                </div>
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-list-ul me-2"></i>授权列表</span>
+                <button class="btn btn-sm btn-outline-primary" onclick="loadCodes()">
+                    <i class="bi bi-arrow-clockwise me-1"></i>刷新
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>软件 / 授权码</th>
+                                <th>使用情况</th>
+                                <th>状态</th>
+                                <th>过期时间</th>
+                                <th>创建时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="codesTableBody">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">
+                                    <i class="bi bi-hourglass-split me-2"></i>加载中...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>
